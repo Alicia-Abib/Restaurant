@@ -1,0 +1,1 @@
+<h2>Réservation enregistrée avec succès !</h2>
