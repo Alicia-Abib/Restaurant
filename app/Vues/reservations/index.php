@@ -7,6 +7,7 @@
         <th>Date</th>
         <th>Heure</th>
         <th>Personnes</th>
+        <th><strong>Table</strong></th>
         <th>Créée le</th>
     </tr>
 
@@ -18,6 +19,8 @@
             <td><?= $res["date_reservation"] ?></td>
             <td><?= $res["heure"] ?></td>
             <td><?= $res["nb_personnes"] ?></td>
+            <td><?= $res["id_table"] ?></td> 
+
             <td><?= $res["created_at"] ?></td>
         </tr>
     <?php endforeach; ?>
