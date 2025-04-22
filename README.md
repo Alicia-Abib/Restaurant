@@ -1,4 +1,4 @@
-# Applicatio de réservation dans un restaurant
+# Application de réservation dans un restaurant
 
 
 
