@@ -1,4 +1,8 @@
 <?php
+// Déboggage
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // Récupérer l’URL après /public/
 $url = $_GET['url'] ?? 'Reservation/create';  // valeur par défaut si vide

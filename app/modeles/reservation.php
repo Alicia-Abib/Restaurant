@@ -3,9 +3,6 @@ require_once __DIR__ . '/../config/database.php';
 
 class Reservation {
 
-
-    
-
     public static function checkTableAvailability($id_table, $date, $heure): bool {
         global $pdo;
         // Ajouter une comparaison plus stricte en incluant la date et l'heure
