@@ -1,12 +1,3 @@
-<h1>Disponibilités des tables (<?= htmlspecialchars($date) ?>)</h1>
-
-<form method="GET" action="?url=Reservation/disponibilites">
-<input type="hidden" name="url" value="Reservation/disponibilites">
-    <label for="date">Choisir une date :</label>
-    <input type="date" name="date" id="date" value="<?= htmlspecialchars($date) ?>">
-    <button type="submit">Voir</button>
-</form>
-
 <table border="1" cellpadding="8">
     <thead>
         <tr>
@@ -16,20 +7,21 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($disponibilites as $d) : ?>
+        <?php foreach ($disponibilites as $d): ?>
         <tr>
-            <td><?= $d['Créneau'] ?></td>
-            <td><?= $d['Table'] ?></td>
+            <td><?= htmlspecialchars($d['creneau']) ?></td>
+            <td><?= htmlspecialchars($d['table']) ?></td>
             <td>
-    <?php if ($d['Statut'] === ' Disponible') : ?>
-        <a href="?url=Reservation/create&date=<?= urlencode($date) ?>&heure=<?= urlencode($d['Créneau']) ?>&table=<?= urlencode($d['Table']) ?>">
-            Réserver ce créneau
-        </a>
-    <?php else : ?>
-        <?= $d['Statut'] ?>
-    <?php endif; ?>
-</td>
-
+                <?php if ($d['statut']): ?>
+                    <a href="#" class="book-btn" 
+                       data-time="<?= htmlspecialchars($d['raw_heure']) ?>" 
+                       data-table="<?= htmlspecialchars($d['raw_table']) ?>">
+                        Réserver
+                    </a>
+                <?php else: ?>
+                    Réservée
+                <?php endif; ?>
+            </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
