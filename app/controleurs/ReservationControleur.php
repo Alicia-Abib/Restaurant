@@ -24,6 +24,10 @@ class ReservationControleur extends Controleur {
             echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
             exit;
         }
+
+        session_start();
+        $id_client = $_SESSION["id_client"] ?? null;
+        
         // Récupérer les données du formulaire
         $nom = filter_var($_POST["nom"], FILTER_SANITIZE_SPECIAL_CHARS);
         $prenom = filter_var($_POST["prenom"], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -47,7 +51,7 @@ class ReservationControleur extends Controleur {
     
         // Enregistrer la réservation
         try {
-            Reservation::add($nom, $prenom, $date, $heure, $nb_personnes, $id_table, $email);
+            Reservation::add($nom, $prenom, $date, $heure, $nb_personnes, $id_table, $email, $id_client);
     
             // Envoi de l'email de confirmation
             $this->sendConfirmationEmail($email, $nom, $prenom, $date, $heure, $nb_personnes, $id_table);

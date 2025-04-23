@@ -80,12 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('recap-time').textContent = heure;
                 document.getElementById('recap-table').textContent = table;
 
-                 // Debug
-                 console.log("Champs après mise à jour :", {
-                    date: dateField.value,
-                    heure: heureField.value,
-                    table: tableField.value
-                });
                 
                 // Faire défiler jusqu'au formulaire
                 document.getElementById('reservation-form').scrollIntoView({
@@ -113,7 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         fetch('?url=Reservation/store', {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'same-origin'
         })
         .then(response => {
             if (!response.ok) {

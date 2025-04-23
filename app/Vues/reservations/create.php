@@ -1,3 +1,7 @@
+<?php
+session_start(); // Start session to access $_SESSION
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +17,12 @@
             <ul>
                 <li><a href="?url=Menu">Notre Menu</a></li>
                 <li><a href="?url=Home">Accueil</a></li>
-                <li><a href="?url=Client/espace" class="btn">Mon Espace</a></li>
+                <?php if(isset($_SESSION["id_client"])): ?>
+                    <li><a href="?url=EspaceClient/dashboard" class="btn">Mon Espace</a></li>
+                    <li><a href="?url=Client/logout" class="btn">Déconnexion</a></li>
+                <?php else:?>
+                    <li><a href="?url=Client/login" class="btn">Mon Espace</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>
@@ -39,17 +48,20 @@
             <form id="booking-form" method="POST">
                 <div class="form-group">
                     <label for="nom">Nom :</label>
-                    <input type="text" id="nom" name="nom" required>
+                    <input type="text" id="nom" name="nom" value="<?php echo isset($_SESSION['nom']) ? htmlspecialchars($_SESSION['nom']) : ''; ?>" required 
+                    <?php echo isset($_SESSION["id_client"]) ? "readonly" : "";?>>
                 </div>
                 
                 <div class="form-group">
                     <label for="prenom">Prénom :</label>
-                    <input type="text" id="prenom" name="prenom" required>
+                    <input type="text" id="prenom" name="prenom" value="<?php echo isset($_SESSION['prenom']) ? htmlspecialchars($_SESSION['prenom']) : ''; ?>" required
+                    <?php echo isset($_SESSION["id_client"]) ? "readonly" : ""; ?>>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Email :</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?>" required
+                    <?php echo isset($_SESSION["id_client"]) ? "readonly" : ''; ?>>
                 </div>
                 
                 <div class="form-group">

@@ -29,11 +29,11 @@ class Reservation {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function add($nom, $prenom, $date, $heure, $nb_personnes, $id_table, $email): void {
+    public static function add($nom, $prenom, $date, $heure, $nb_personnes, $id_table, $email, $id_client = null): void {
         global $pdo;
         // On n'inclut pas 'id' et 'created_at' car elles sont gérées automatiquement (auto_increment et valeur par défaut)
-        $sql = "INSERT INTO reservations (nom, prenom, date_reservation, heure, nb_personnes, id_table, email)
-                VALUES (:nom, :prenom, :date, :heure, :nb_personnes, :id_table, :email)";
+        $sql = "INSERT INTO reservations (nom, prenom, date_reservation, heure, nb_personnes, id_table, email, id_client)
+                VALUES (:nom, :prenom, :date, :heure, :nb_personnes, :id_table, :email, :id_client)";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -43,7 +43,8 @@ class Reservation {
             ':heure' => $heure,
             ':nb_personnes' => $nb_personnes,
             ':id_table' => $id_table,
-            ':email' => $email
+            ':email' => $email, 
+            ':id_client' => $id_client
         ]);
     }
     
