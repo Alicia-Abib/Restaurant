@@ -17,6 +17,27 @@ class ReservationControleur extends Controleur {
         $this->view('reservations/create');
     }
 
+    public function edit(): void{
+        session_start();
+        if (!isset($_SESSION['id_client'])) {
+            header('Location: ?url=Client/login');
+            exit;
+        }
+
+        $id = (int)($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            header('Location: ?url=EspaceClient/dashboard');
+            exit;
+        }
+
+        $reservation = Reservation::getById($id);
+        if (!$reservation || $reservation['id_client'] != $_SESSION['id_client']) {
+            header('Location: ?url=EspaceClient/dashboard');
+            exit;
+        }
+
+        $this->view('reservations/edit', ['reservation' => $reservation]);
+    }
 
     public function store(): void {
         header('Content-Type: application/json');
@@ -59,28 +80,13 @@ class ReservationControleur extends Controleur {
             echo json_encode([
                 'success' => true,
                 'message' => 'Réservation confirmée avec succès',
-                'redirect' => "?url=Reservation/confirmation&nom=".urlencode($nom)."&prenom=".urlencode($prenom)."&date=".urlencode($date)."&heure=".urlencode($heure)."&table=".$id_table."&nb_personnes=".$nb_personnes
+                //'redirect' => "?url=Reservation/confirmation&nom=".urlencode($nom)."&prenom=".urlencode($prenom)."&date=".urlencode($date)."&heure=".urlencode($heure)."&table=".$id_table."&nb_personnes=".$nb_personnes
             ]);
     
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'enregistrement: '.$e->getMessage()]);
             }
             exit;
-    }
-    
-    public function mesReservations(): void {
-        $email = $_GET['email'] ?? '';
-    
-        if (empty($email)) {
-            $this->view('reservations/monespace');
-            return;
-        }
-    
-        $reservations = Reservation::getByEmail($email);
-        $this->view('reservations/mesreservations', [
-            'reservations' => $reservations,
-            'email' => $email
-        ]);
     }
     
     
@@ -142,12 +148,96 @@ class ReservationControleur extends Controleur {
             ";
     
             $mail->send();
-            // Tu peux logguer ici si besoin : echo 'Message envoyé !';
         } catch (Exception $e) {
             echo "Erreur lors de l'envoi du message : {$mail->ErrorInfo}";
         }
     }
 
+    // Méthode pout envoyer l'email de confirmation de suppression 
+    private function sendSupressionEmail($email, $nom, $prenom,$date, $heure, $nb_personnes, $id_table): void{
+        // Charger les variables d'environnement
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+        $dotenv->load();
+
+        $mail = new PHPMailer(true);
+
+        try{
+            // conf du serveur
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['GMAIL_USER'];
+            $mail->Password = $_ENV['GMAIL_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Destinataire et expéditeur
+            $mail->setFrom($_ENV['GMAIL_USER'], 'Réservations Restaurant');
+            $mail->addAddress($email);
+            
+            // Contenu 
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmation de suppression de votre réservation';
+            $mail->Body = "
+                <h2>Bonjour $prenom $nom,</h2>
+                <p>Votre réservation a été supprimée avec succès. Voici les détails de la réservation supprimée :</p>
+                <ul>
+                    <li><strong>Date :</strong> $date</li>
+                    <li><strong>Heure :</strong> $heure</li>
+                    <li><strong>Nombre de personnes :</strong> $nb_personnes</li>
+                    <li><strong>Table n° :</strong> $id_table</li>
+                </ul>
+                <p>À très bientôt !</p>
+                <p>Restauranteeeeee</p>
+            ";
+            $mail->send();
+        }catch (Exception $e) {
+            echo "Erreur lors de l'envoi du message : {$mail->ErrorInfo}";
+        }
+    }
+
+    // méthode pour envoyer l'email de confirmation de modification
+    private function sendModificationEmail($email, $nom, $prenom,$date, $heure, $nb_personnes, $id_table){
+         // Charger les variables d'environnement
+         $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+         $dotenv->load();
+ 
+         $mail = new PHPMailer(true);
+ 
+         try{
+             // conf du serveur
+             $mail->isSMTP();
+             $mail->Host = 'smtp.gmail.com';
+             $mail->SMTPAuth = true;
+             $mail->Username = $_ENV['GMAIL_USER'];
+             $mail->Password = $_ENV['GMAIL_PASS'];
+             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+             $mail->Port = 587;
+ 
+             // Destinataire et expéditeur
+             $mail->setFrom($_ENV['GMAIL_USER'], 'Réservations Restaurant');
+             $mail->addAddress($email);
+             
+             // Contenu 
+             $mail->isHTML(true);
+             $mail->Subject = 'Confirmation de mise à jour de réservation';
+             $mail->Body = "
+                 <h2>Bonjour $prenom $nom,</h2>
+                 <p>Votre réservation a été mise à jour avec succès. Voici les nouveaux détails :</p>
+                 <ul>
+                     <li><strong>Date :</strong> $date</li>
+                     <li><strong>Heure :</strong> $heure</li>
+                     <li><strong>Nombre de personnes :</strong> $nb_personnes</li>
+                     <li><strong>Table n° :</strong> $id_table</li>
+                 </ul>
+                 <p>À très bientôt !</p>
+                 <p>Restauranteeeeee</p>
+             ";
+             $mail->send();
+         }catch (Exception $e) {
+             echo "Erreur lors de l'envoi du message : {$mail->ErrorInfo}";
+         }
+    }
 
     public function disponibilites(): void {
         $date = $_GET['date'] ?? date('Y-m-d');
@@ -169,51 +259,44 @@ class ReservationControleur extends Controleur {
         ]);
     }
     
-    public function edit(): void {
-        $id = $_GET['id'] ?? null;
-    
-        if (!$id) {
-            echo "ID manquant.";
-            return;
-        }
-    
-        $reservation = Reservation::getById($id);
-    
-        if (!$reservation) {
-            echo "Réservation introuvable.";
-            return;
-        }
-    
-        $this->view('reservations/edit', ['reservation' => $reservation]);
-    }
-    
     public function update(): void {
+        session_start();
+    
         header('Content-Type: application/json');
+
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
             exit;
         }
         try{
-            $id = $_POST['id'];
-            $nom = $_POST["nom"];
-            $prenom = $_POST["prenom"];
-            $email = $_POST["email"];
-            $date = $_POST["date"];
-            $heure = $_POST["heure"];
-            $nb_personnes = $_POST["nb_personnes"];
-            $id_table = $_POST["id_table"];
+            $id = (int)($_POST['id'] ?? 0);
+            $nom = filter_var($_POST['nom'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $prenom = filter_var($_POST['prenom'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+            $date = $_POST['date'] ?? '';
+            $heure = $_POST['heure'] ?? '';
+            $nb_personnes = (int)($_POST['nb_personnes'] ?? 0);
+            $id_table = (int)($_POST['id_table'] ?? 0);
     
-            if(empty($id) || empty($nom) || empty($prenom) || !filter_var($email, FILTER_VALIDATE_EMAIL) || 
-            empty($date) || empty($heure) || $nb_personnes <= 0 || $id_table <= 0) {
-                echo json_encode(['success' => false, 'message' => 'Données invalides']);
+            if ($id <= 0) {
+                echo json_encode(['success' => false, 'message' => 'ID invalide']);
+                exit; 
+            }
+
+            // vérifier que la réservation appartient au client
+            $reservation = Reservation::getById($id);
+            if(!$reservation || $reservation["id_client"] != $_SESSION["id_client"] || $reservation["email"] != $_SESSION["email"]) {
+                echo json_encode(["success" => false, "message" => "Réservation non trouvée ou non autorisée"]);
                 exit;
             }
-            Reservation::update($id, $nom, $prenom, $date, $heure, $nb_personnes, $id_table, $email);
-            echo json_encode([
-                'success' => true,
-                'message' => 'Réservation mise à jour avec succès',
-                'redirect' => "?url=Reservation/mesReservations&email=".urlencode($email)
-            ]);
+
+            Reservation::update($id, $nom, $prenom, $date, $heure,$nb_personnes, $id_table, $email);
+            
+            // Envoyer l'email de confirmation
+            $this->sendModificationEmail($email, $nom, $prenom, $date, $heure, $nb_personnes, $id_table);
+            
+            echo json_encode(['success' => true, 'message' => 'Réservation mise à jour avec succès']);
+            
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erreur: '.$e->getMessage()]);            
         }
@@ -221,6 +304,7 @@ class ReservationControleur extends Controleur {
     
 
     public function delete(): void {
+        session_start();
         header('Content-Type: application/json');
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -235,13 +319,31 @@ class ReservationControleur extends Controleur {
             exit; 
         }
 
+        // vérfier que la réservation apartien au client
+        $reservation = Reservation::getById($id);
+        if(!$reservation || $reservation["id_client"] != $_SESSION["id_client"] || $reservation["email"] != $email) {
+            echo json_encode(["success" => false, "message" => "Réservation non trouvée ou non autorisée"]);
+            exit;
+        }
+
         try {
+            // récupérer les détail de la res avant la suppression
+            $detailsRes = $reservation;
             Reservation::delete($id);
-            echo json_encode([
-                'success' => true,
-                'message' => 'Réservation supprimée',
-                'redirect' => "?url=Reservation/mesReservations&email=".urlencode($email)
-            ]);
+            // envoyer un email de confirmation de suppression
+            $this->sendSupressionEmail(
+                $email,
+                $_SESSION['nom'],
+                $_SESSION['prenom'],
+                $detailsRes['date_reservation'],
+                $detailsRes['heure'],
+                $detailsRes['nb_personnes'],
+                $detailsRes['id_table']
+            );
+
+            echo json_encode(['success' => true,'message' => 'Réservation supprimée',]);
+
+            header('Location: ?url=EspaceClient/dashboard');
         }catch(Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erreur: '.$e->getMessage()]);
         }
@@ -249,6 +351,7 @@ class ReservationControleur extends Controleur {
 
     }
     
+
     
     
     

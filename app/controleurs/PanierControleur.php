@@ -21,7 +21,7 @@ class PanierControleur
                 $total  += $plat['soustot'];
             }
         }
-        include __DIR__.'/../vues/panier.php';
+        include __DIR__.'/../Vues/panier.php';
     }
 
     /* Ajouter 1 exemplaire */

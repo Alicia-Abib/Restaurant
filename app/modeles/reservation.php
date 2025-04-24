@@ -97,7 +97,7 @@ class Reservation {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public static function getById(int $id): ?array {
+    public static function getById(int $id){
         global $pdo;
         $stmt = $pdo->prepare("SELECT * FROM reservations WHERE id = :id");
         $stmt->execute(['id' => $id]);

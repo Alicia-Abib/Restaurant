@@ -43,9 +43,10 @@
                                 <td><?php echo htmlspecialchars($reservation['id_table']); ?></td>
                                 <td>
                                     <a href="?url=Reservation/edit&id=<?php echo $reservation['id']; ?>" class="btn">Modifier</a>
-                                    <form method="POST" action="?url=EspaceClient/supprimerReservation" style="display:inline;">
+                                    <form method="POST" action="?url=Reservation/delete" style="display:inline;">
                                         <input type="hidden" name="id" value="<?php echo $reservation['id']; ?>">
-                                        <button type="submit" class="btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                                        <input type="hidden" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>">
+                                        <button type="submit" class="btn btn-delete">Supprimer</button>
                                     </form>
                                 </td>
                             </tr>
@@ -59,5 +60,6 @@
             <a href="?url=Reservation/create" class="btn">Faire une nouvelle réservation</a>
         </section>
     </div>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

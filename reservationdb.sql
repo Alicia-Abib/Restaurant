@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : jeu. 24 avr. 2025 à 12:00
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Host: localhost
+-- Generation Time: Apr 24, 2025 at 05:26 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `reservationdb`
+-- Database: `reservationdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `categories`
+-- Table structure for table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -33,7 +33,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `categories`
+-- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`id`, `nom`) VALUES
@@ -45,7 +45,7 @@ INSERT INTO `categories` (`id`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `clients`
+-- Table structure for table `clients`
 --
 
 CREATE TABLE `clients` (
@@ -57,7 +57,7 @@ CREATE TABLE `clients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `clients`
+-- Dumping data for table `clients`
 --
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
@@ -66,7 +66,7 @@ INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `menu`
+-- Table structure for table `menu`
 --
 
 CREATE TABLE `menu` (
@@ -80,7 +80,7 @@ CREATE TABLE `menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `menu`
+-- Dumping data for table `menu`
 --
 
 INSERT INTO `menu` (`id`, `nom`, `description`, `prix`, `image_url`, `category_id`, `created_at`) VALUES
@@ -100,7 +100,7 @@ INSERT INTO `menu` (`id`, `nom`, `description`, `prix`, `image_url`, `category_i
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reservations`
+-- Table structure for table `reservations`
 --
 
 CREATE TABLE `reservations` (
@@ -117,7 +117,7 @@ CREATE TABLE `reservations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `reservations`
+-- Dumping data for table `reservations`
 --
 
 INSERT INTO `reservations` (`id`, `nom`, `prenom`, `date_reservation`, `heure`, `nb_personnes`, `created_at`, `id_table`, `email`, `id_client`) VALUES
@@ -131,85 +131,82 @@ INSERT INTO `reservations` (`id`, `nom`, `prenom`, `date_reservation`, `heure`, 
 (15, 'Dupont', 'jean', '2025-04-01', '22:16:00', 2, '2025-04-12 15:37:34', 1, 'jeandupont5@gmail.com', NULL),
 (16, 'Dupont', 'jean', '2025-04-01', '22:16:00', 2, '2025-04-12 15:37:45', 2, 'jeandupont5@gmail.com', NULL),
 (35, 'Moucer', 'Bahdja', '2025-04-22', '12:00:00', 1, '2025-04-22 22:09:29', 2, 'b.moucer12@gmail.com', NULL),
-(36, 'Rahali', 'Thiziri', '2025-04-23', '12:00:00', 1, '2025-04-23 11:36:23', 4, 'mcrbahdja@gmail.com', 1),
-(37, 'Rahali', 'Thiziri', '2025-04-23', '13:00:00', 2, '2025-04-23 12:43:04', 3, 'mcrbahdja@gmail.com', 1),
 (38, 'Alicia', 'Abib', '2025-04-23', '13:00:00', 1, '2025-04-23 15:44:07', 2, 'abib.alicia@yahoo.com', NULL),
 (39, 'Alicia', 'Abib', '2025-04-23', '14:00:00', 1, '2025-04-23 15:44:25', 1, 'abib.alicia@yahoo.com', NULL),
-(40, 'Rahali', 'Thiziri', '2025-04-23', '12:00:00', 1, '2025-04-23 18:58:49', 3, 'mcrbahdja@gmail.com', 1),
-(41, 'Rahali', 'Thiziri', '2025-04-23', '12:00:00', 2, '2025-04-23 19:17:05', 2, 'mcrbahdja@gmail.com', 1);
+(45, 'Rahali', 'Thiziri', '2025-04-24', '12:00:00', 2, '2025-04-24 15:18:14', 3, 'mcrbahdja@gmail.com', 1);
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `categories`
+-- Indexes for table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nom` (`nom`);
 
 --
--- Index pour la table `clients`
+-- Indexes for table `clients`
 --
 ALTER TABLE `clients`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Index pour la table `menu`
+-- Indexes for table `menu`
 --
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`),
   ADD KEY `category_id` (`category_id`);
 
 --
--- Index pour la table `reservations`
+-- Indexes for table `reservations`
 --
 ALTER TABLE `reservations`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_client` (`id_client`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `categories`
+-- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT pour la table `clients`
+-- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `menu`
+-- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT pour la table `reservations`
+-- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `menu`
+-- Constraints for table `menu`
 --
 ALTER TABLE `menu`
   ADD CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 
 --
--- Contraintes pour la table `reservations`
+-- Constraints for table `reservations`
 --
 ALTER TABLE `reservations`
   ADD CONSTRAINT `fk_client` FOREIGN KEY (`id_client`) REFERENCES `clients` (`id`) ON DELETE SET NULL;

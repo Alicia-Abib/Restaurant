@@ -1,4 +1,6 @@
 <?php
+
+require_once __DIR__ . '/../Core/controleur.php';
 require_once __DIR__ . '/../modeles/menu.php';
 
 class MenuControleur {
@@ -23,27 +25,27 @@ class MenuControleur {
             return;
         }
     
-        $nom         = filter_var($_POST['nom'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $nom = filter_var($_POST['nom'], FILTER_SANITIZE_SPECIAL_CHARS);
         $description = filter_var($_POST['description'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $prix        = filter_var($_POST['prix'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $categorie_id= (int)$_POST['categorie_id'];
+        $prix = filter_var($_POST['prix'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $categorie_id = (int)$_POST['categorie_id'];
         $image_url = null;
     
         if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     
             $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
-            $finfo   = finfo_open(FILEINFO_MIME_TYPE);
-            $mime    = finfo_file($finfo, $_FILES['image']['tmp_name']);
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['image']['tmp_name']);
     
             if (!array_key_exists($mime, $allowed)) {
                 echo "Format d’image non autorisé.";
                 return;
             }
     
-            $ext       = $allowed[$mime];
-            $filename  = 'menu_' . uniqid() . '.' . $ext;
+            $ext = $allowed[$mime];
+            $filename = 'menu_' . uniqid() . '.' . $ext;
             $targetDir = __DIR__ . '/../../public/assets/img/';
-            $target    = $targetDir . $filename;
+            $target = $targetDir . $filename;
     
             if (!move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
                 echo "Erreur lors du déplacement du fichier.";
@@ -75,7 +77,7 @@ class MenuControleur {
     $categories = Menu::getCategories();
 
     // On transmet tout à la vue
-    include __DIR__ . '/../vues/home.php';
+    include __DIR__ . '/../Vues/home.php';
 }
 
     public function update(): void
@@ -86,11 +88,11 @@ class MenuControleur {
     }
 
     /*------------------ données textuelles ------------------*/
-    $id          = (int) $_POST['id'];
-    $nom         = filter_var($_POST['nom'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $id = (int) $_POST['id'];
+    $nom = filter_var($_POST['nom'], FILTER_SANITIZE_SPECIAL_CHARS);
     $description = filter_var($_POST['description'], FILTER_SANITIZE_SPECIAL_CHARS);
-    $prix        = filter_var($_POST['prix'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-    $categorie_id= (int) $_POST['categorie_id'];
+    $prix = filter_var($_POST['prix'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    $categorie_id = (int) $_POST['categorie_id'];
 
     
     $image_url = $_POST['current_image'] ?? null;

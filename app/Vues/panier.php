@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="fr"><head>
-<link rel="stylesheet" href="/reservation-site/public/css/style.css">
+<link rel="stylesheet" href="css/style.css">
 <meta charset="UTF-8"><title>Mon panier</title>
 <style>
 table{width:100%;border-collapse:collapse;margin-top:1rem;}
