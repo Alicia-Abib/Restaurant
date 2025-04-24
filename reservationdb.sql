@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 24, 2025 at 05:26 PM
+-- Generation Time: Apr 25, 2025 at 01:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,7 +61,7 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
-(1, 'Rahali', 'Thiziri', 'mcrbahdja@gmail.com', '$2y$10$VnJO8anQuYQzrU0mZaCicuO4ZN6M8zN4akb2GXVknJR08b0mvfmyS');
+(1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$VnJO8anQuYQzrU0mZaCicuO4ZN6M8zN4akb2GXVknJR08b0mvfmyS');
 
 -- --------------------------------------------------------
 
@@ -133,7 +133,7 @@ INSERT INTO `reservations` (`id`, `nom`, `prenom`, `date_reservation`, `heure`, 
 (35, 'Moucer', 'Bahdja', '2025-04-22', '12:00:00', 1, '2025-04-22 22:09:29', 2, 'b.moucer12@gmail.com', NULL),
 (38, 'Alicia', 'Abib', '2025-04-23', '13:00:00', 1, '2025-04-23 15:44:07', 2, 'abib.alicia@yahoo.com', NULL),
 (39, 'Alicia', 'Abib', '2025-04-23', '14:00:00', 1, '2025-04-23 15:44:25', 1, 'abib.alicia@yahoo.com', NULL),
-(45, 'Rahali', 'Thiziri', '2025-04-24', '12:00:00', 2, '2025-04-24 15:18:14', 3, 'mcrbahdja@gmail.com', 1);
+(47, 'Rahali', 'Thiziri', '2025-04-24', '12:00:00', 2, '2025-04-24 22:34:32', 2, 'mcrbahdja@gmail.com', 1);
 
 --
 -- Indexes for dumped tables
@@ -193,7 +193,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- Constraints for dumped tables

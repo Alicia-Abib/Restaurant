@@ -53,4 +53,30 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     });
+
+    // logique menu
+    const menuToggle = document.querySelector(".toggle");
+    const menuDrop = document.querySelector(".menu-drop");
+
+    if(menuDrop && menuToggle){
+        menuToggle.addEventListener('clique', (e) => {
+            e.preventDefault();
+            menuDrop.classList.toggle("show");
+        });
+
+        // fermer le menu en cas de clique dehors
+        document.addEventListener("click", (e) => {
+            if(!menuToggle.contains(e.target) && !menuDrop.contains(e.target)){
+                menuDrop.classList.remove("show");
+            }
+        });
+
+        // fermer lors du clique sur un item
+        menuDrop.querySelectorAll(".menu-item").forEach(item => {
+            item.addEventListener("click", () => {
+                menuDrop.classList.remove("show");
+            });
+        })
+    }
+
 });

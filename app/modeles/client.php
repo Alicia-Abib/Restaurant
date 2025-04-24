@@ -15,6 +15,36 @@ class Client {
         $this->pdo = $pdo;
     }
     
+    public static function getById($id){
+        global $pdo;
+        $stmt = $pdo->prepare('SELECT * FROM clients WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getByEmail($email){
+        global $pdo;
+        $stmt = $pdo->prepare('SELECT * FROM clients WHERE email = :email');
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function update($id, $data){
+        global $pdo;
+        try {
+            $stmt = $pdo->prepare('UPDATE clients SET nom = :nom, prenom = :prenom, email = :email WHERE id = :id');
+            $stmt->execute([
+                'id' => $id,
+                'nom' => $data['nom'],
+                'prenom' => $data['prenom'],
+                'email' => $data['email']
+            ]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log('Client Update Error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
     public function login ($email, $pwd): bool {
         $sql =  "SELECT id, nom, prenom, email, mdp FROM " . $this->nom_table . " WHERE email = :email LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
@@ -62,6 +92,8 @@ class Client {
         $stmt->execute(["email" => $email]);
         return $stmt->rowCount() > 0;
     }
+
+    
 }
 
 ?>

@@ -131,8 +131,10 @@ class ReservationControleur extends Controleur {
             // Destinataire et expéditeur
             $mail->setFrom($_ENV['GMAIL_USER'], 'Réservations Restaurant');
             $mail->addAddress($email);
-    
+
             // Contenu HTML
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
             $mail->isHTML(true);
             $mail->Subject = 'Confirmation de votre réservation';
             $mail->Body = "
@@ -176,6 +178,8 @@ class ReservationControleur extends Controleur {
             $mail->addAddress($email);
             
             // Contenu 
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
             $mail->isHTML(true);
             $mail->Subject = 'Confirmation de suppression de votre réservation';
             $mail->Body = "
@@ -219,6 +223,8 @@ class ReservationControleur extends Controleur {
              $mail->addAddress($email);
              
              // Contenu 
+             $mail->CharSet = 'UTF-8';
+             $mail->Encoding = 'base64';
              $mail->isHTML(true);
              $mail->Subject = 'Confirmation de mise à jour de réservation';
              $mail->Body = "

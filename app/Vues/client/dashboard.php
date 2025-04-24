@@ -13,7 +13,13 @@
             <ul>
                 <li><a href="?url=Menu">Notre Menu</a></li>
                 <li><a href="?url=Home">Accueil</a></li>
-                <li><a href="?url=Client/logout" class="btn">Déconnexion</a></li>
+                <li class="menu">
+                    <button class="btn toggle"><?php echo htmlspecialchars($_SESSION["prenom"])?>▼</button>
+                    <ul class="menu-drop">
+                        <li><a href="?url=Client/profile" class="menu-item">Mon Profil</a></li>
+                        <li><a href="?url=Client/logout" class="menu-item">Déconnexion</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>

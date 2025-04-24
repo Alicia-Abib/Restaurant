@@ -3,6 +3,9 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../Core/controleur.php';
 require_once __DIR__ . '/../modeles/client.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
 class ClientControleur extends Controleur {
 
     private $client;
@@ -53,6 +56,123 @@ class ClientControleur extends Controleur {
             }
         }
     }
+
+    public function profile() {
+        session_start();
+        if(!isset($_SESSION["id_client"])){
+            header("Location: ?url=Clinet/login");
+            exit();
+        }
+
+        $client = Client::getById($_SESSION["id_client"]);
+        if(!$client){
+            session_destroy();
+            header("Location: ?url=Client/login");
+            exit();
+        }
+        $this->view("client/profile", ["client" => $client]);
+    }
+
+    public function update(): void {
+        session_start();
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            exit;
+        }
+
+        if (!isset($_SESSION['id_client'])) {
+            echo json_encode(['success' => false, 'message' => 'Non connecté']);
+            exit;
+        }
+
+        try {
+            $id = (int)$_SESSION['id_client'];
+            $nom = filter_var($_POST['nom'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $prenom = filter_var($_POST['prenom'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+
+            if (empty($nom) || empty($prenom) || empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo json_encode(['success' => false, 'message' => 'Données invalides']);
+                exit;
+            }
+
+            // Check if email is already used by another client
+            $existingClient = Client::getByEmail($email);
+            if ($existingClient && $existingClient['id'] != $id) {
+                echo json_encode(['success' => false, 'message' => 'Cet email est déjà utilisé']);
+                exit;
+            }
+
+            // Update client
+            $updated = Client::update($id, [
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'email' => $email
+            ]);
+
+            if ($updated) {
+                // Update session
+                $_SESSION['nom'] = $nom;
+                $_SESSION['prenom'] = $prenom;
+                $_SESSION['email'] = $email;
+
+                // Send confirmation email
+                $this->sendModificationEmail($nom, $prenom, $email);
+
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Profil mis à jour avec succès',
+                    'redirect' => '?url=Client/profile'
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Aucune modification effectuée']);
+            }
+        } catch (Exception $e) {
+            error_log('Client Update Error: ' . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Erreur: ' . $e->getMessage()]);
+        }
+    }
+
+    private function sendModificationEmail($nom, $prenom, $email): void {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+        $dotenv->load();
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['GMAIL_USER'];
+            $mail->Password = $_ENV['GMAIL_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+        
+            $mail->setFrom($_ENV['GMAIL_USER'], 'Restaurant');
+            $mail->addAddress($email, "$prenom $nom");
+        
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmation de mise à jour de votre profil';
+            $mail->Body = "
+                <h2>Confirmation de mise à jour</h2>
+                <p>Cher(e) $prenom $nom,</p>
+                <p>Votre profil a été mis à jour avec succès :</p>
+                <ul>
+                    <li><strong>Nom :</strong> $nom</li>
+                    <li><strong>Prénom :</strong> $prenom</li>
+                    <li><strong>Email :</strong> $email</li>
+                </ul>
+                <p>Merci de votre confiance !</p>
+                <p>L'équipe du Restaurant</p>
+            ";
+        
+            $mail->send();
+        } catch (Exception $e) {
+            error_log("Failed to send profile update email to $email: " . $mail->ErrorInfo);
+        }
+        }
 
     public function logout(): void {
         session_start();
