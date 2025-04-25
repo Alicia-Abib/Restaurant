@@ -247,9 +247,14 @@ td .btn {
     padding: 0.5rem 0;
 }
 
-.menu:hover .menu-drop {
+/*.menu:hover .menu-drop {
+    display: block;
+}*/
+
+.menu-drop.show {
     display: block;
 }
+
 
 .menu-drop li {
     list-style: none;

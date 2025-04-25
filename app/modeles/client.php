@@ -63,33 +63,43 @@ class Client {
         return false;
     }
 
-    public function inscription($nom, $prenom, $email, $pwd) : bool {
-        if($this->emailExists($email)){
-            return false;
+    public static function inscription($nom, $prenom, $email, $pwd) : bool {
+        global $pdo;
+
+        try{
+
+            // vérifier si l'mail existe déjà
+            $stmt = $pdo->prepare("SELECT id FROM clients WHERE email = :email LIMIT 1");
+            $stmt->execute(['email' => $email]);
+            if ($stmt->rowCount() > 0) {
+                return false;
+            }
+
+            $sql = "INSERT INTO clients (nom, prenom, email, mdp) VALUES (:nom, :prenom, :email, :mdp)";
+            $stmt = $pdo->prepare($sql);
+            $nom = filter_var($nom, FILTER_SANITIZE_SPECIAL_CHARS);
+            $prenom = filter_var($prenom, FILTER_SANITIZE_SPECIAL_CHARS);
+            $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+            $pwd = password_hash($pwd, PASSWORD_BCRYPT);
+
+            $stmt->execute([
+                "nom"=> $nom,
+                "prenom"=> $prenom,
+                "email"=> $email,
+                "mdp" => $pwd
+            ]);
+
+            return $stmt->rowCount() > 0;
+        } catch(PDOException $e){
+            error_log('Client Inscription Error: ' . $e->getMessage());
+            throw $e;
         }
-
-        $sql = "INSERT INTO " . $this->nom_table . " (nom, prenom, email, mdp) VALUES (:nom, :prenom, :email, :mdp)";
-        $stmt = $this->pdo->prepare($sql);
-
-        $nom = filter_var($nom, FILTER_SANITIZE_SPECIAL_CHARS);
-        $prenom = filter_var($prenom, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-        $pwd = password_hash($pwd, PASSWORD_BCRYPT);
-
-        $stmt->execute([
-            "nom"=> $nom,
-            "prenom"=> $prenom,
-            "email"=> $email,
-            "mdp" => $pwd
-        ]);
-
-        return $stmt->rowCount() > 0;
     }
 
-    public function emailExists($email) : bool {
-        $sql = "SELECT id FROM " . $this->nom_table . " WHERE email = :email LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(["email" => $email]);
+    public static function emailExists($email) : bool {
+        global $pdo;
+        $stmt = $pdo->prepare("SELECT id FROM clients WHERE email = :email LIMIT 1");
+        $stmt->execute(['email' => $email]);
         return $stmt->rowCount() > 0;
     }
 

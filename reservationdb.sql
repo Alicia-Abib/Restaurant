@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 25, 2025 at 01:31 AM
+-- Generation Time: Apr 25, 2025 at 12:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,7 +61,8 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
-(1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$VnJO8anQuYQzrU0mZaCicuO4ZN6M8zN4akb2GXVknJR08b0mvfmyS');
+(1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$VnJO8anQuYQzrU0mZaCicuO4ZN6M8zN4akb2GXVknJR08b0mvfmyS'),
+(3, 'Rahali', 'Thiziri', 'b.moucer12@gmail.com', '$2y$10$vqbigjL4eqYptI8zbnuIHOtHwUK0CLzzrT8FD30Kkxli4o5QAAT4y');
 
 -- --------------------------------------------------------
 
@@ -128,12 +129,9 @@ INSERT INTO `reservations` (`id`, `nom`, `prenom`, `date_reservation`, `heure`, 
 (12, 'mehdi', 'amokrane', '2025-04-30', '20:30:00', 1, '2025-04-12 15:28:30', 1, 'mehdiamokrane28@gmail.com', NULL),
 (13, 'mehdi', 'amokrane', '2025-04-17', '15:40:00', 1, '2025-04-12 15:28:59', 1, 'mehdiamokrane28@gmail.com', NULL),
 (14, 'Dupont', 'lily', '2025-04-02', '23:11:00', 2, '2025-04-12 15:36:27', 1, 'aliceabib5@gmail.com', NULL),
-(15, 'Dupont', 'jean', '2025-04-01', '22:16:00', 2, '2025-04-12 15:37:34', 1, 'jeandupont5@gmail.com', NULL),
-(16, 'Dupont', 'jean', '2025-04-01', '22:16:00', 2, '2025-04-12 15:37:45', 2, 'jeandupont5@gmail.com', NULL),
-(35, 'Moucer', 'Bahdja', '2025-04-22', '12:00:00', 1, '2025-04-22 22:09:29', 2, 'b.moucer12@gmail.com', NULL),
 (38, 'Alicia', 'Abib', '2025-04-23', '13:00:00', 1, '2025-04-23 15:44:07', 2, 'abib.alicia@yahoo.com', NULL),
-(39, 'Alicia', 'Abib', '2025-04-23', '14:00:00', 1, '2025-04-23 15:44:25', 1, 'abib.alicia@yahoo.com', NULL),
-(47, 'Rahali', 'Thiziri', '2025-04-24', '12:00:00', 2, '2025-04-24 22:34:32', 2, 'mcrbahdja@gmail.com', 1);
+(51, 'Rahali', 'Thiziri', '2025-04-25', '13:00:00', 1, '2025-04-25 10:31:19', 1, 'b.moucer12@gmail.com', 3),
+(52, 'Moucer', 'Bahdja', '2025-04-25', '14:00:00', 4, '2025-04-25 10:32:22', 4, 'mcrbahdja@gmail.com', 1);
 
 --
 -- Indexes for dumped tables
@@ -181,7 +179,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `menu`
@@ -193,7 +191,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Constraints for dumped tables

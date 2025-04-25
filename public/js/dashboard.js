@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuDrop = document.querySelector(".menu-drop");
 
     if(menuDrop && menuToggle){
-        menuToggle.addEventListener('clique', (e) => {
+        menuToggle.addEventListener('click', (e) => {
             e.preventDefault();
             menuDrop.classList.toggle("show");
         });

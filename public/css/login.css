@@ -48,15 +48,7 @@ nav ul li a:hover {
 }
 
 .btn {
-    /*display: inline-block;
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s;*/
-    background-color: var(--secondary-color);
+    background-color:  #f39c12;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
