@@ -103,7 +103,71 @@ class Client {
         return $stmt->rowCount() > 0;
     }
 
+    public static function EnrgResetCode($email, $code){
+        global $pdo;
+        try{
+            // supprimer les anciens code pour l'email (eviter les conflit)
+            $stmt = $pdo->prepare("DELETE FROM mdp_reset_codes WHERE email = :email");
+            $stmt->execute(["email" => $email]);
+
+            // stocker le nouveau code
+            $expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+            $stmt = $pdo->prepare("
+                INSERT INTO mdp_reset_codes (email, code, created_at, expires_at)
+                VALUES (:email, :code, NOW(), :expires_at)
+            ");
+            $stmt->execute([
+                ':email' => $email,
+                ':code' => $code,
+                ':expires_at' => $expires_at
+            ]);
+        }catch(PDOException $e){
+            error_log('Erreur d\'enregirement du reset code: ' . $e->getMessage());
+            throw $e;
+        }
+    }
     
+    public static function verifierCode($email, $code){
+        global $pdo;
+        try {
+            $stmt = $pdo->prepare("
+                SELECT code FROM mdp_reset_codes 
+                WHERE email = :email AND code = :code AND expires_at > NOW()
+            ");
+            $stmt->execute(['email' => $email, 'code' => $code]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log('Erreur de vérification du reset code: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public static function supprimerResetCode($email){
+        global $pdo;
+        try {
+            $pdo->prepare("DELETE FROM mdp_reset_codes WHERE email = :email")
+                ->execute(['email' => $email]);
+        } catch (PDOException $e) {
+            error_log('Erreur de suppression du reset code: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public static function updateMotDePasse($email, $new_mdp){
+        global $pdo;
+        try {
+            $stmt = $pdo->prepare("UPDATE clients SET mdp = :mdp WHERE email = :email");
+            $stmt->execute([
+                ':email' => $email,
+                ':mdp' => password_hash($new_mdp, PASSWORD_BCRYPT)
+            ]);
+            return $stmt->rowCount() > 0;
+            
+        } catch (PDOException $e) {
+            error_log('Erreur de mise à jour du mot de passe: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }
 
 ?>

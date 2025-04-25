@@ -57,6 +57,106 @@ class ClientControleur extends Controleur {
         }
     }
 
+    public function motDePasseOublie(){
+        $this->view("client/login", ["action" => "motDePasseOublie"]);
+    }
+
+    public function envoyerCodeReinit(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->view('client/login', [
+                    'action' => 'motDePasseOublie',
+                    'resetError' => 'Adresse email invalide.'
+                ]);
+                return;
+            }
+
+            if (!Client::emailExists($email)) {
+                $this->view('client/login', [
+                    'action' => 'motDePasseOublie',
+                    'resetError' => 'Cet email n\'est pas associé à un compte.'
+                ]);
+                return;
+            }
+
+            try {
+                $code = sprintf("%04d", random_int(0, 9999));
+                Client::EnrgResetCode($email, $code);
+                $this->sendResetCodeEmail($email, $code);
+
+                header('Location: ?url=Client/login&action=verifierCode&email='.urlencode($email));
+                exit();
+            } catch (Exception $e) {
+                error_log("Erreur: " . $e->getMessage());
+                $this->view('client/login', [
+                    'action' => 'motDePasseOublie',
+                    'resetError' => 'Une erreur est survenue. Veuillez réessayer.'
+                ]);
+            }
+        }
+    }
+
+    public function reinitMotDePasse(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+            $code = filter_var($_POST['code'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $new_pwd = $_POST['new_pwd'];
+            $confirm_pwd = $_POST['confirm_pwd'];
+
+            // Validation
+            $errors = [];
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Email invalide';
+            }
+
+            if (!preg_match('/^\d{4}$/', $code)) {
+                $errors[] = 'Code invalide';
+            }
+
+            if ($new_pwd !== $confirm_pwd) {
+                $errors[] = 'Les mots de passe ne correspondent pas';
+            }
+
+
+            if (!empty($errors)) {
+                $this->view('client/login', [
+                    'action' => 'verifierCode',
+                    'email' => $email,
+                    'resetError' => implode('<br>', $errors)
+                ]);
+                return;
+            }
+
+            try {
+                if (!Client::verifierCode($email, $code)) {
+                    throw new Exception("Code invalide ou expiré");
+                }
+
+                if (Client::updateMotDePasse($email, $new_pwd)) {
+                    Client::supprimerResetCode($email);
+                    $this->view('client/login', [
+                        'success' => 'Mot de passe réinitialisé avec succès'
+                    ]);
+                } else {
+                    throw new Exception("Échec de la mise à jour du mot de passe");
+                }
+            } catch (Exception $e) {
+                error_log("Erreur: " . $e->getMessage());
+                $this->view('client/login', [
+                    'action' => 'verifierCode',
+                    'email' => $email,
+                    'resetError' => $e->getMessage()
+                ]);
+            }
+        }
+    }
     public function profile() {
         session_start();
         if(!isset($_SESSION["id_client"])){
@@ -135,6 +235,40 @@ class ClientControleur extends Controleur {
         }
     }
 
+    private function sendResetCodeEmail($email, $code){
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+        $dotenv->load();
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['GMAIL_USER'];
+            $mail->Password = $_ENV['GMAIL_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+        
+            $mail->setFrom($_ENV['GMAIL_USER'], 'Restaurant');
+            $mail->addAddress($email);
+        
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+            $mail->isHTML(true);
+            $mail->Subject = 'Code de réinitialisation de mot de passe';
+            $mail->Body = "
+                <h2>Réinitialisation de votre mot de passe</h2>
+                <p>Vous avez demandé à réinitialiser votre mot de passe. Voici votre code de confirmation :</p>
+                <p><strong>Code :</strong> $code</p>
+                <p>Ce code est valide pendant 15 minutes.</p>
+                <p>Si vous n'avez pas fait cette demande, ignorez cet email.</p>
+                <p>L'équipe du Restaurant</p>>
+            ";
+        
+            $mail->send();
+        } catch (Exception $e) {
+            error_log("Failed to send profile update email to $email: " . $mail->ErrorInfo);
+        }
+    }
     private function sendModificationEmail($nom, $prenom, $email): void {
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
@@ -172,7 +306,7 @@ class ClientControleur extends Controleur {
         } catch (Exception $e) {
             error_log("Failed to send profile update email to $email: " . $mail->ErrorInfo);
         }
-        }
+    }
 
     public function logout(): void {
         session_start();

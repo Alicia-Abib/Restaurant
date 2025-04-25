@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 25, 2025 at 12:33 PM
+-- Generation Time: Apr 25, 2025 at 03:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,8 +61,22 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
-(1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$VnJO8anQuYQzrU0mZaCicuO4ZN6M8zN4akb2GXVknJR08b0mvfmyS'),
-(3, 'Rahali', 'Thiziri', 'b.moucer12@gmail.com', '$2y$10$vqbigjL4eqYptI8zbnuIHOtHwUK0CLzzrT8FD30Kkxli4o5QAAT4y');
+(1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$RtiU7qvFKBjvNV61q51XguZ4mGO.E/XjjADGYcKR5hjgt04g.o6Gm'),
+(3, 'Rahali', 'Thiziri', 'b.moucer12@gmail.com', '$2y$10$7ynjDhKvaFCrrbaPFgZEMuzjbBDIzgGprPzFSScr6IEb6VtKKQb2u');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mdp_reset_codes`
+--
+
+CREATE TABLE `mdp_reset_codes` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `code` varchar(4) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `expires_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -152,6 +166,13 @@ ALTER TABLE `clients`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `mdp_reset_codes`
+--
+ALTER TABLE `mdp_reset_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_email` (`email`);
+
+--
 -- Indexes for table `menu`
 --
 ALTER TABLE `menu`
@@ -182,6 +203,12 @@ ALTER TABLE `clients`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `mdp_reset_codes`
+--
+ALTER TABLE `mdp_reset_codes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
@@ -196,6 +223,12 @@ ALTER TABLE `reservations`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `mdp_reset_codes`
+--
+ALTER TABLE `mdp_reset_codes`
+  ADD CONSTRAINT `mdp_reset_codes_ibfk_1` FOREIGN KEY (`email`) REFERENCES `clients` (`email`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `menu`
