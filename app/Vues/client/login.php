@@ -13,7 +13,7 @@
             <ul>
                 <li><a href="?url=Menu">Notre Menu</a></li>
                 <li><a href="?url=Home">Accueil</a></li>
-                <li><a href="?url=Client/login" class="btn">Mon Espace</a></li>
+                <li><a href="?url=Reservation/create">Réserver</a></li>
             </ul>
         </nav>
     </header>

@@ -38,20 +38,30 @@ nav ul li {
 nav ul li a {
     color: white;
     text-decoration: none;
-    transition: color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 nav ul li a:hover {
-    color: #f39c12;
+    background-color: #f39c12;
 }
 
 .btn {
-    display: inline-block;
+    /*display: inline-block;
     background-color: #f39c12;
     color: white;
+    border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
+    transition: background-color 0.3s;*/
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
