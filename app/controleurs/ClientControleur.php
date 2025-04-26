@@ -157,10 +157,65 @@ class ClientControleur extends Controleur {
             }
         }
     }
+
+    public function changerMotDePasse() {
+        session_start();
+        header('Content-Type: application/json');
+        ini_set('display_errors', 0);
+        error_reporting(E_ALL);
+    
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            exit;
+        }
+    
+        if (!isset($_SESSION['id_client'])) {
+            echo json_encode(['success' => false, 'message' => 'Non connecté']);
+            exit;
+        }
+
+        try {
+            $id = (int)$_SESSION['id_client'];
+            $current_password = $_POST['current_password'];
+            $new_password = $_POST['new_password'];
+            $confirm_password = $_POST['confirm_password'];
+    
+            // Validation
+            if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+                echo json_encode(['success' => false, 'message' => 'Tous les champs sont requis']);
+                exit;
+            }
+    
+            if ($new_password !== $confirm_password) {
+                echo json_encode(['success' => false, 'message' => 'Les mots de passe ne correspondent pas']);
+                exit;
+            }
+    
+            // Vérifier le mot de passe actuel
+            $client = Client::getById($id);
+            if (!password_verify($current_password, $client['mdp'])) {
+                echo json_encode(['success' => false, 'message' => 'Mot de passe actuel incorrect']);
+                exit;
+            }
+    
+            // Mettre à jour le mot de passe
+            if (Client::updateMotDePasse($client['email'], $new_password)) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Mot de passe mis à jour avec succès',
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour']);
+            }
+        } catch (Exception $e) {
+            error_log('Change Password Error: ' . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Erreur: ' . $e->getMessage()]);
+        }
+    }
     public function profile() {
         session_start();
         if(!isset($_SESSION["id_client"])){
-            header("Location: ?url=Clinet/login");
+            header("Location: ?url=Client/login");
             exit();
         }
 
@@ -198,14 +253,14 @@ class ClientControleur extends Controleur {
                 exit;
             }
 
-            // Check if email is already used by another client
+            // Si l'email est dèjà utilisé
             $existingClient = Client::getByEmail($email);
             if ($existingClient && $existingClient['id'] != $id) {
                 echo json_encode(['success' => false, 'message' => 'Cet email est déjà utilisé']);
                 exit;
             }
 
-            // Update client
+            // Mise à jour
             $updated = Client::update($id, [
                 'nom' => $nom,
                 'prenom' => $prenom,

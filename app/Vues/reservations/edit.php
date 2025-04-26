@@ -50,11 +50,11 @@
                 </div>
                 <div class="form-group">
                     <label for="date">Date :</label>
-                    <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($reservation['date_reservation']); ?>" disabled required>
+                    <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($reservation['date_reservation']); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="heure">Heure :</label>
-                    <input type="time" id="heure" name="heure" value="<?php echo htmlspecialchars($reservation['heure']); ?>" disabled required>
+                    <input type="time" id="heure" name="heure" value="<?php echo htmlspecialchars($reservation['heure']); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="nb_personnes">Nombre de personnes :</label>

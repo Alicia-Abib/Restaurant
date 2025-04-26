@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // afficher les dispos en fonction de la réponse
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const table = doc.querySelector('table');
+                const table = doc.querySelector('.creneaux-grid');
 
                 if(table) {
                     document.getElementById("resultats-dispos").innerHTML = `
@@ -68,12 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 const newOption = new Option(`Table ${tableId}`, tableId, true, true);
                 tableField.add(newOption);
-
-                // Activer les champs
-                document.getElementById('date').disabled = false;
-                document.getElementById('heure').disabled = false;
-                tableField.disabled = false;
-
                 
                 // Mettre à jour le récapitulatif
                 document.getElementById('recap-date').textContent = formatDate(date);

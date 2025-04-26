@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // afficher les dispos en fonction de la réponse
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const table = doc.querySelector('table');
+            const table = doc.querySelector('.creneaux-grid');
 
             if(table) {
                 document.getElementById("resultats-dispos").innerHTML = `
