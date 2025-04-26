@@ -62,20 +62,29 @@ class Reservation {
         $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
         $disponibilites = [];
+        $heure_courante = time(); // timestamp
+        $aujourhui = date('Y-m-d');
     
         foreach ($plages as $plage) {
+            $heure = strtotime("$date {$plage['heure']}");
+
+            // supprimer les créneaux passés pour aujourd'hui
+            if($date === $aujourhui && $heure < $heure_courante){
+                continue; // ignorer le créneau
+            }
+
             foreach ($tables as $table) {
-                $slot_start_time = strtotime("$date {$plage['heure']}");
-                $slot_end_time = $slot_start_time + 3600;
     
-                $deja_reservee = array_filter($reservations, function($r) use ($slot_start_time, $slot_end_time, $table, $date) {
+                $deja_reservee = array_filter($reservations, function($r) use ($heure, $table, $date) {
                     if ($r['date'] !== $date) return false;
                     if ($r['id_table'] != $table) return false;
     
                     $res_start = strtotime("{$r['date']} {$r['heure']}");
                     $res_end = $res_start + 3600;
+
+                    $fin_heure = $heure + 3600;
     
-                    return ($res_start < $slot_end_time && $res_end > $slot_start_time);
+                    return ($res_start < $fin_heure && $res_end > $heure);
                 });
     
                 $disponibilites[] = [
