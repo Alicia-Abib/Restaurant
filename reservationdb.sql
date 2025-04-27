@@ -64,6 +64,7 @@ INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mdp`) VALUES
 (1, 'Moucer', 'Bahdja', 'mcrbahdja@gmail.com', '$2y$10$RtiU7qvFKBjvNV61q51XguZ4mGO.E/XjjADGYcKR5hjgt04g.o6Gm'),
 (3, 'Rahali', 'Thiziri', 'b.moucer12@gmail.com', '$2y$10$7ynjDhKvaFCrrbaPFgZEMuzjbBDIzgGprPzFSScr6IEb6VtKKQb2u');
 
+
 -- --------------------------------------------------------
 
 --

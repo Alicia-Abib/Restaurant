@@ -11,7 +11,8 @@
 </head>
 <body>
     <header class="menu-header">
-        <div class="logo">Restaurant</div>
+        <div class="logo">Wok n’Roll
+        </div>
         <nav>
             <ul>
                 <li><a href="?url=Home">Accueil</a></li>

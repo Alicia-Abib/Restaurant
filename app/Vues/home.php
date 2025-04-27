@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <div class="logo">Restaurant</div>
+        <div class="logo">Wok n’Roll</div>
         <nav>
             <ul>
                 <li><a href="?url=Menu/index">Notre Menu</a></li>
@@ -30,7 +30,7 @@
 
     <section class="intro">
         <h1>Le Goût de l'Est</h1>
-        <p>I will say something here later</p>
+        <p>Marché d’Asie, cœur Dijon</p>
         <a href="?url=Reservation/create" class="cta-button"> Réservation une table</a>
     </section>
 
@@ -62,7 +62,8 @@
     </section>
 
     <footer>
-        <div class="footer-logo">Restaurant</div>
+        <div class="footer-logo">Wok n’Roll
+        </div>
     </footer>
 
     <script src="js/home.js"></script>
