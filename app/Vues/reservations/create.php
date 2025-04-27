@@ -13,11 +13,11 @@ session_start(); // Start session to access $_SESSION
 </head>
 <body>
     <header>
-        <div class="logo">Restaurant</div> <!-- Ajouter un logo cliquable vers le home -->
+        <div class="logo">Wok n’Roll</div>
         <nav>
             <ul>
-                <li><a href="?url=Menu">Notre Menu</a></li>
                 <li><a href="?url=Home">Accueil</a></li>
+                <li><a href="?url=Menu">Notre Menu</a></li>
                 <?php if(isset($_SESSION["id_client"])): ?>
                     <li><a href="?url=EspaceClient/dashboard" class="btn">Mon Espace</a></li>
                     <li><a href="?url=Client/logout" class="btn">Déconnexion</a></li>

@@ -153,7 +153,7 @@ class ReservationControleur extends Controleur {
 
     // méthode pour générer un mot de passe
     private function genererMotDePasse($longueur = 8){
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*';
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         $mdp = '';
         for($i = 0; $i < $longueur; $i++){
             $mdp .= $chars[random_int(0, strlen($chars) - 1)];
@@ -195,9 +195,9 @@ class ReservationControleur extends Controleur {
                     <li><strong>Email : </strong> $email</li>
                     <li><strong>Mot de passe : </strong> $mdp</li>
                 </ul>
-                <p>Vous pouvez vous connectez à votre espace client pour gérer vos réservations : </p>
-                <p><a href='?url=Client/login'>Se connecter</a></p>
+                <p>Vous pouvez vous connectez à votre espace client pour gérer vos réservations</p>
                 <p>À très bientôt !</p>
+                <p>Wok n'Roll</p>
             ";
     
             $mail->send();
@@ -243,6 +243,7 @@ class ReservationControleur extends Controleur {
                     <li><strong>Table n° :</strong> $id_table</li>
                 </ul>
                 <p>À très bientôt !</p>
+                <p>Wok n'Roll</p>
             ";
     
             $mail->send();
@@ -288,7 +289,7 @@ class ReservationControleur extends Controleur {
                     <li><strong>Table n° :</strong> $id_table</li>
                 </ul>
                 <p>À très bientôt !</p>
-                <p>Restauranteeeeee</p>
+                <p>Wok n'Roll</p>
             ";
             $mail->send();
         }catch (Exception $e) {
@@ -333,7 +334,7 @@ class ReservationControleur extends Controleur {
                      <li><strong>Table n° :</strong> $id_table</li>
                  </ul>
                  <p>À très bientôt !</p>
-                 <p>Restauranteeeeee</p>
+                 <p>Wok n'Roll</p>
              ";
              $mail->send();
          }catch (Exception $e) {

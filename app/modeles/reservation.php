@@ -84,7 +84,7 @@ class Reservation {
 
                     $fin_heure = $heure + 3600;
     
-                    return ($res_start < $fin_heure && $res_end > $heure);
+                    return $res_start < $fin_heure && $res_end > $heure;
                 });
     
                 $disponibilites[] = [

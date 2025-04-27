@@ -16,8 +16,8 @@ class HomeControleur extends Controleur {
                 'contenu' => 'Fondé en 2010, notre restaurant apporte une touche moderne à la cuisine asiatique traditionnelle. Nos chefs, formés au Japon et en Chine, créent des plats authentiques avec des ingrédients locaux frais.'
             ],
             'quote' => [
-                'texte' => 'When you drink the water, remember the spring',
-                'auteur' => 'Yin Shui Si Yuan'
+                'texte' => 'The best time to plant a tree was 20 years ago. The second best time is now.',
+                'auteur' => 'Proverbe Chinois'
             ]
         ];
         $this->view('home', $data);

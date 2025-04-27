@@ -68,6 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 const newOption = new Option(`Table ${tableId}`, tableId, true, true);
                 tableField.add(newOption);
+
+                document.getElementById('date').disabled = false;
+                document.getElementById('heure').disabled = false;
+                tableField.disabled = false;
                 
                 // Mettre à jour le récapitulatif
                 document.getElementById('recap-date').textContent = formatDate(date);

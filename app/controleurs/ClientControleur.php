@@ -268,12 +268,12 @@ class ClientControleur extends Controleur {
             ]);
 
             if ($updated) {
-                // Update session
+                // Mettre à jour la session
                 $_SESSION['nom'] = $nom;
                 $_SESSION['prenom'] = $prenom;
                 $_SESSION['email'] = $email;
 
-                // Send confirmation email
+                // Enoyer le mail de confirmation de modification
                 $this->sendModificationEmail($nom, $prenom, $email);
 
                 echo json_encode([

@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">Restaurant</div>
+        <div class="logo">Wok n’Roll</div>
         <nav>
             <ul>
                 <li><a href="?url=Menu">Notre Menu</a></li>

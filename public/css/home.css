@@ -115,7 +115,7 @@ nav a:hover {
 /* Menu Preview */
 .menu-preview {
     padding: 5rem 2rem;
-    background-color: var(--card-color);
+    background-color: var(--background-color);
     text-align: center;
 }
 
@@ -139,20 +139,21 @@ nav a:hover {
 }
 
 #menu-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2.5rem;
     margin: 3rem auto;
     max-width: 1200px;
+    background: none;
 }
 
 .menu-item {
     background: var(--card-color);
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    border: 1px solid #eee;
+    flex: 0 1 300px;
 }
 
 .menu-item:hover {

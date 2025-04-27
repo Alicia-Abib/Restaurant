@@ -8,7 +8,6 @@
 </head>
 <body>
     <?php 
-    // En haut du fichier, après l'ouverture du <body>
     if (isset($_SESSION['reset_success'])): ?>
     <div class="success-message">
         <?= htmlspecialchars($_SESSION['reset_success']) ?>
@@ -16,7 +15,7 @@
     </div>
     <?php endif; ?>
     <header>
-        <div class="logo">Restaurant</div>
+        <div class="logo">Wok n’Roll</div>
         <nav>
             <ul>
                 <li><a href="?url=Menu">Notre Menu</a></li>
