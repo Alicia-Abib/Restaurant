@@ -27,6 +27,11 @@ Elle a été développée dans le cadre du projet « Développement web ».
 - MySQL 8
 - **Composer** (obligatoire pour installer PHPMailer et que l’envoi d’e-mails fonctionne)
 - XAMPP pour un environnement local « tout-en-un »
+  
+## Accès Backend
+- Nom d'utilisateur : root
+- Mot de passe : (vide)
+  (la base de données peut être importée à partir du fichier reservationdb.sql)
 
 ## Installation rapide
 
