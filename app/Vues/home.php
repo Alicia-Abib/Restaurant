@@ -31,7 +31,7 @@
     <section class="intro">
         <h1>Le Goût de l'Est</h1>
         <p>Marché d’Asie, cœur Dijon</p>
-        <a href="?url=Reservation/create" class="cta-button"> Réservation une table</a>
+        <a href="?url=Reservation/create" class="cta-button"> Réservation d'une table</a>
     </section>
 
     <!--Ajouter que 3 item de la base de données aléatoirement avec JS-->
