@@ -11,6 +11,6 @@
     <li><strong>Nombre de personnes :</strong> <?= htmlspecialchars($nb_personnes) ?></li>
 </ul>
 
-<p>📧 Un email de confirmation vous a été envoyé.</p>
+<p>Un email de confirmation vous a été envoyé.</p>
 
 <a href="?url=Reservation/index">← Retour aux réservations</a>

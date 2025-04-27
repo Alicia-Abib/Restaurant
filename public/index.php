@@ -22,8 +22,8 @@ if (file_exists($controllerPath)) {
     if (method_exists($controller, $method)) {
         $controller->$method();
     } else {
-        echo "❌ Méthode '$method' non trouvée dans $controllerName.";
+        echo "Méthode '$method' non trouvée dans $controllerName.";
     }
 } else {
-    echo "❌ Contrôleur '$controllerName' non trouvé.";
+    echo "Contrôleur '$controllerName' non trouvé.";
 }
