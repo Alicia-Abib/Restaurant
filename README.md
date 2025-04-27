@@ -2,7 +2,7 @@
 **Auteurs : 
 Abib Aicia , Moucer Bahdja**
 
-# Application de Réservation de Restaurant (PHP / MVC)
+# Application de Réservation de Restaurant
 
 ## Présentation
 Cette application web permet aux clients de réserver une table en ligne et à l’équipe du restaurant de gérer les réservations dans un tableau de bord administrateur.  
@@ -31,8 +31,10 @@ Elle a été développée dans le cadre du projet « Développement web ».
 ## Installation rapide
 
 ```bash
-# 1. Cloner le dépôt
-git clone https://github.com/Abib-Alicia/restaurant-reservation.git
+# 1. Cloner le dépôt via HTTP
+git clone https://github.com/Alicia-Abib/Restaurant.git 
+# ou bien via SSH
+git clone git@github.com:Alicia-Abib/Restaurant.git
 cd restaurant-reservation
 
 # 2. Installer les dépendances PHP (PHPMailer)
